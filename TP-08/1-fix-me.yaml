@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app25
+spec:
+  selector:
+    matchLabels:
+      app: app25
+  template:
+    metadata:
+      labels:
+        app: app25
+    spec:
+      containers:
+      - name: zxcfshdg
+        image: stefanprodan/podinfo:5.0.1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: app25
+  name: app25
+spec:
+  type: ClusterIP
+  selector: {}
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 9898
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app: app25
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+  name: app25
+spec:
+  tls:
+  - hosts:
+    - <user>.wmars.party
+    secretName: app-cert
+  rules:
+  - host: <user>.wmars.party
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: app25
+            port:
+              number: 80

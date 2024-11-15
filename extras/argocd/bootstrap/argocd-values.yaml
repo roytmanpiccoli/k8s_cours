@@ -1,0 +1,51 @@
+controller:
+  resources:
+    requests:
+      cpu: 512m
+      memory: 1024Mi
+    limits:
+      cpu: 512m
+      memory: 1024Mi
+  metrics:
+    enabled: true
+
+repoServer:
+  resources:
+    requests:
+      cpu: 512m
+      memory: 1024Mi
+    limits:
+      cpu: 512m
+      memory: 1024Mi
+  metrics:
+    enabled: true
+
+server:
+  resources:
+    requests:
+      cpu: 512m
+      memory: 1024Mi
+    limits:
+      cpu: 512m
+      memory: 1024Mi
+  metrics:
+    enabled: true
+
+  # ------------------------------------
+  # choose either ingress or service LB
+  # ------------------------------------
+  # ingress:
+  #   annotations:
+  #     cert-manager.io/cluster-issuer: letsencrypt
+  #     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+  #     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+  #   enabled: true
+  #   hosts:
+  #     - argocd.user-00.wmars.party
+  #   tls:
+  #     - hosts:
+  #         - argocd.user-00.wmars.party
+  #       secretName: argocd-secret
+
+  service:
+    type: LoadBalancer

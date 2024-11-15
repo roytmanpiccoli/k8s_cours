@@ -1,0 +1,13 @@
+version: '3'
+
+tasks:
+  default:
+    desc: "Run all the setup scripts"
+    deps:
+      - metrics-server
+
+  metrics-server:
+    dir: ./metrics-server
+    cmds:
+      - bash ./setup.sh
+    desc: "Run the metrics server setup script"

@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app10
+  name: app10
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app10
+  template:
+    metadata:
+      labels:
+        app: app10
+    spec:
+      containers:
+      - name: app10
+        image: jwilder/whoami:latest
+        resources: {}
+        ports:
+        - containerPort: 8000
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: app10
+  name: app10
+spec:
+  selector:
+    app:  app10
+  type:  LoadBalancer
+  ports:
+  - name:  http
+    port:  80
+    targetPort: 8000

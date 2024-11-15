@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: app16
+  name: app16
+spec:
+  containers:
+  - image: alpine:edge
+    args:
+    - ash
+    - -c
+    - "while true; do date '+%Y-%m-%d %H:%M:%S'; sleep 1; done"
+    imagePullPolicy: IfNotPresent
+    name: app16
+    resources: {}
+    env:
+      - name: "APP_PARAM_1"
+        value: "777"
+      - name: "APP_PARAM_2"
+        value: |
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt sollicitudin est a ultrices. Donec porta ornare dui sit amet suscipit. Pellentesque sit amet vestibulum justo. Aenean sit amet pretium orci, vel ultrices felis. Sed id leo nec massa efficitur gravida id egestas arcu. Mauris ultrices hendrerit ante, eu dignissim mi tempus a. In hac habitasse platea dictumst. In mollis neque quis augue lobortis, sed aliquam dolor bibendum. Sed scelerisque tellus pulvinar dolor euismod condimentum. Morbi vel elementum libero, ac condimentum elit. Morbi consequat, ex quis cursus dapibus, elit eros ullamcorper eros, at auctor ipsum magna vitae tortor. Ut nec massa at orci bibendum vestibulum. Phasellus ut sagittis est. Duis in elit nunc. Aenean quis ultricies orci.
+          Nullam vel massa ut nibh vulputate faucibus eget sed tellus. Sed dignissim ultricies volutpat. In hac habitasse platea dictumst. Aenean eget ultrices sem. Ut quis dolor ut velit finibus pulvinar. Aliquam dictum eleifend libero, at posuere justo semper eget. Sed commodo purus vel erat tempus sodales.
+          Phasellus bibendum iaculis malesuada. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin accumsan suscipit nisi in faucibus. Nullam vehicula tellus in ligula viverra, non gravida elit bibendum. Nam congue consequat velit, vitae blandit nisi rhoncus et. Phasellus turpis turpis, tristique in porttitor vitae, efficitur vel lorem. Curabitur ultricies in mauris ut volutpat. Nulla porta nec sapien id bibendum. Pellentesque fermentum eget elit id fringilla. Cras ligula ante, elementum non tincidunt sed, faucibus in dolor. Ut imperdiet mauris ligula, id cursus ex aliquet nec. Vestibulum viverra orci sit amet ullamcorper dignissim. Nullam id tellus ac urna consectetur malesuada vel at tellus. Proin vel dui suscipit, efficitur tellus vitae, rhoncus nulla. Etiam condimentum tincidunt suscipit. Nullam suscipit ac tellus at cursus.
+          Nullam sed lectus turpis. Proin luctus metus vitae nisl lacinia consectetur. Etiam vestibulum sodales ex non dapibus. Morbi rhoncus vel nisl ac imperdiet. Proin luctus, eros ac iaculis tristique, lorem urna rutrum metus, ultrices pulvinar tellus nisl in magna. In hac habitasse platea dictumst. Phasellus finibus enim blandit, tincidunt sapien non, porta neque. Quisque vel mauris ac justo varius rhoncus et id lacus. Quisque congue magna sit amet porttitor volutpat. Aliquam lacinia scelerisque efficitur. Nullam fermentum, sem sed vulputate facilisis, nisi nulla lacinia sapien, vitae luctus leo neque et libero. Aliquam et arcu at neque pharetra molestie.
+          Ut id bibendum tortor. In vitae vestibulum odio, at porta eros. Praesent non felis eu purus maximus pulvinar sit amet sit amet lorem. Mauris consectetur est at arcu volutpat, id vehicula odio consectetur. Morbi sollicitudin felis ut risus pulvinar auctor. Donec at aliquet tortor. Sed lacinia egestas velit, nec mollis enim viverra et. Vestibulum vehicula pellentesque dui, fringilla rutrum quam vehicula eu. Cras auctor eleifend est ut tincidunt. Vivamus luctus nibh ac arcu blandit, sit amet mattis tortor sodales. Sed euismod semper convallis. Pellentesque ac erat tellus. Duis congue at quam porttitor tincidunt.

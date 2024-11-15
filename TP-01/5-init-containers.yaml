@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: app05
+  name: app05
+spec:
+  containers:
+  - name: api
+    image: webofmars/flask-example:latest
+    ports:
+    - containerPort: 5000
+    imagePullPolicy: IfNotPresent
+    resources: {}
+  initContainers:
+  - name: wait-for-it
+    image: alpine:edge
+    command: ['ash', '-c', 'until (date "+%Y-%m-%d %H:%M:%S" | grep 7); do echo nope; sleep 1; done']
+  - name: welcome-msg
+    image: alpine:edge
+    command: ['ash', '-c', 'echo "etape2 OK"']
+  - name: calc-hype
+    image: perl:5.22
+    command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]

@@ -1,0 +1,15 @@
+persistence:
+  defaultClass: false
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+  host: longhorn.wmars.party
+  tls: true
+  tlsSecret: longhorn-tls
+
+metrics:
+  serviceMonitor:
+    enabled: true

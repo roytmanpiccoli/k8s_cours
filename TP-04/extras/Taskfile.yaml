@@ -1,0 +1,20 @@
+version: '3'
+
+tasks:
+  default:
+    desc: "Run all the setup scripts"
+    deps:
+      - longhorn
+      - nfs
+
+  longhorn:
+    dir: ./longhorn
+    cmds:
+      - bash ./setup.sh
+    desc: "Run the Longhorn setup script"
+
+  nfs:
+    dir: ./nfs
+    cmds:
+      - bash ./setup.sh
+    desc: "Run the NFS setup script"

@@ -1,0 +1,48 @@
+version: '3'
+
+vars:
+  REMOTE_SERVER: form-access.wmars.party
+  SCP_OPT: -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR
+
+tasks:
+
+  default:
+    deps:
+      - build-archive
+
+  build-archive:
+    desc: 'Export the git archive of the TPs'
+    cmds:
+      - echo 'Building archive...'
+      - git archive HEAD ':^solutions' | gzip -c > _TPs.tgz
+    silent: true
+
+  upload-kubeconfig:
+    desc: 'Upload kubeconfig to the remote access server'
+    cmds:
+      - echo "uploading $KUBECONFIG to remote server {{ .REMOTE_SERVER }}"
+      - scp {{ .SCP_OPT }} $KUBECONFIG root@{{ .REMOTE_SERVER }}:/TPs/_kubeconfig
+    silent: true
+
+  upload-archive:
+    desc: 'Upload the archive to the remote access server'
+    cmds:
+      - echo 'Uploading archive...'
+      - scp {{ .SCP_OPT }} _TPs.tgz root@{{ .REMOTE_SERVER }}:/TPs/
+    silent: true
+
+  copy-archive:
+    desc: 'Copy the archive to the USB key'
+    cmds:
+      - echo -n 'Insert the USB key... (press enter to continue)'
+      - read -r
+      - echo 'Opening folder...'
+      - open .
+    silent: true
+
+  clean:
+    desc: 'Clean the project'
+    cmds:
+      - echo 'Cleaning...'
+      - rm -f _TPs.tgz
+    silent: true

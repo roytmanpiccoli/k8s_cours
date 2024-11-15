@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app14
+  name: app14
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app14
+  template:
+    metadata:
+      labels:
+        app: app14
+    spec:
+      volumes:
+      - name: app14-data
+        persistentVolumeClaim:
+          claimName: app14-pvc
+      containers:
+      - name: app14
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: "/usr/share/nginx/html"
+          name: app14-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: app14
+  name: app14
+spec:
+  type: ClusterIP
+  selector:
+    app: app14
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: app14
+  name: app14-pvc
+spec:
+  storageClassName: longhorn
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi

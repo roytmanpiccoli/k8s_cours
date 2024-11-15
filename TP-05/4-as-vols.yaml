@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: app19
+  name: config-app19
+data:
+  param1: "777"
+  param2: "plop"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: app19
+  name: secrets-app19
+data:
+  secret1: c3VwZXJzZWNyZXQ=
+  secret2: YW5vdGhlclNlY3JldA==
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: app19
+  name: app19
+spec:
+  containers:
+  - image: alpine:edge
+    args:
+    - ash
+    - -c
+    - "while true; do sleep 1; done"
+    imagePullPolicy: IfNotPresent
+    name: app19
+    volumeMounts:
+    - name: params
+      mountPath: "/config/params"
+      readOnly: true
+    - name: secrets
+      mountPath: "/config/secrets"
+      readOnly: true
+  volumes:
+  - name: params
+    configMap:
+      name: config-app19
+  - name: secrets
+    secret:
+      secretName: secrets-app19

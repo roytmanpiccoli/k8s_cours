@@ -1,0 +1,43 @@
+alertmanager:
+  enabled: true
+defaultRules:
+  create: true
+  rules:
+    etcd: false
+    kubeScheduler: false
+grafana:
+  adminPassword: prom-operator
+  enabled: true
+  persistence:
+    accessModes:
+    - ReadWriteOnce
+    enabled: true
+    size: 5Gi
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      cert-manager.io/cluster-issuer: letsencrypt
+    hosts:
+      - grafana.wmars.party
+    tls:
+      - secretName: grafana-tls
+        hosts:
+          - grafana.wmars.party
+kubeEtcd:
+  enabled: false
+kubeScheduler:
+  enabled: false
+prometheus:
+  enabled: true
+  prometheusSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 5Gi
+prometheusOperator:
+  enabled: true

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app06
+  name: app06
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app06
+  template:
+    metadata:
+      labels:
+        app: app06
+    spec:
+      containers:
+      - name: app06
+        image: jwilder/whoami:latest
+        resources: {}
+        ports:
+        - containerPort: 8000
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: app06
+  name: app06
+spec:
+  type: ClusterIP
+  selector:
+    app: app06
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 8000

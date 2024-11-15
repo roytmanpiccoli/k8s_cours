@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app23
+  name: app23
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app23
+  template:
+    metadata:
+      labels:
+        app: app23
+    spec:
+      containers:
+      - name: app23
+        image: monachus/rancher-demo:latest
+        env:
+        - name: COW_COLOR
+          value: red
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "2Mi"
+          limits:
+            cpu: "500m"
+            memory: "10Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: app23
+  name:  app23
+spec:
+  type:  ClusterIP
+  sessionAffinity: None
+  ports:
+  - port:  80
+    protocol: TCP
+    targetPort:  8080
+  selector:
+    app: app23
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app23
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+    - <user>.wmars.party
+    secretName: app-cert
+  rules:
+  - host: <user>.wmars.party
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: app23
+            port:
+              number: 80

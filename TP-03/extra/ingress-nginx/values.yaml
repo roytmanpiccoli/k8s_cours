@@ -1,0 +1,59 @@
+controller:
+  replicaCount: 2
+  config:
+    proxy-body-size: 2m
+    server-tokens: "false"
+    ssl-redirect: "true"
+    use-forwarded-headers: "true"
+    use-proxy-protocol: "false"
+    enable-modsecurity: "true"
+    custom-http-errors: 404,408,500,501,502,503,504,505
+    # from https://github.com/kubernetes/ingress-nginx/issues/8017
+    http-snippet: |
+      server {
+        listen 2443;
+        return 308 https://$host$request_uri;
+      }
+  containerPort:
+    http: 80
+    https: 443
+    tohttps: 2443
+  service:
+    enableHttp: true
+    enableHttps: true
+    targetPorts:
+      http: tohttps # from https://github.com/kubernetes/ingress-nginx/issues/8017
+      https: https
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      namespace: kube-prometheus-stack
+      additionalLabels:
+        release: kube-prometheus-stack
+        app.kubernetes.io/part-of: kube-prometheus
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 200
+    targetMemoryUtilizationPercentage: 200
+  ingressClassResource:
+    default: true
+  watchIngressWithoutClass: true
+
+# generate with 'openssl dhparam 2048 2>/dev/null | base64'
+dhParam: LS0tLS1CRUdJTiBESCBQQVJBTUVURVJTLS0tLS0KTUlJQkRBS0NBUUVBNUpKTmFlaGFXcFFtQ3JMcXVTTHpRZFk5S1daSHNwU3JlemluUVllM21xM2k4UUVoY3BXZQprTFhOQWtMR2ZmYndXazJIeWlwNlRkbjZ2NUVYRVNjYlpqM1Y2LzNmL25rOVp2SUpOQnc0cjZjdmxkZm5RQWx4CkVQaWtjL0dVWkh5L0RPV0twaS9rRFFLV3dnaE1UQWlENGUzR1FreUgyWVZiN3R6bVVIeGhuYnExcm91MmF4R3UKUkE4MEMyUDFNTWk2Z3NYRkdMZWVDZ3RWaDcxMUVvcHpvV1dZY24ydVN4TENHbExBa2d3NEt4M29QVm9GZEc3cApRVnRrN0QxL1Y2Y20wbU41eEl1ek00M3dGWkpTdWtIRWJJbXZFdVRpZ3NMY20xVGpFSGh2UXYvRVFBaGZoV2x6ClRxdkRzNmNRSVMvaXVJQXhCTUhrWEJTdUQwQSt6ZnZQVHdJQkFnSUNBT0U9Ci0tLS0tRU5EIERIIFBBUkFNRVRFUlMtLS0tLQo=
+
+# Prepackaged default error pages from https://github.com/tarampampam/error-pages/wiki/Kubernetes-&-ingress-nginx
+# multiple themes here: https://tarampampam.github.io/error-pages/
+defaultBackend:
+  enabled: true
+  image:
+    repository: ghcr.io/tarampampam/error-pages
+    tag: 2.25
+  extraEnvs:
+    - name: TEMPLATE_NAME
+      value: orient
+    - name: SHOW_DETAILS # Optional: enables the output of additional information on error pages
+      value: "true"

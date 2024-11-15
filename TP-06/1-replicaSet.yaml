@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  labels:
+    app: app20
+  name: app20
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app20
+  template:
+    metadata:
+      labels:
+        app: app20
+    spec:
+      containers:
+      - name: app20
+        image: alpine:3.20
+        args:
+        - ash
+        - -c
+        - "while true; do hostname; sleep 1; done"

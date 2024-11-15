@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: app09
+  name: app09
+spec:
+  externalName: google.fr
+  type: ExternalName
+  # NB: autre forme d'utilisation
+  # externalIPs:
+  #   # this is the ip of google.fr search engine
+  #   - 172.217.20.195

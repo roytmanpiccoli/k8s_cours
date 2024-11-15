@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: app03
+  name: app03
+spec:
+  containers:
+  - name: producer
+    image: dkeis/fortune
+    ports:
+    - containerPort: 8080
+    imagePullPolicy: IfNotPresent
+    # we just set resources to null to avoid some editors warnings
+    resources: {}
+    command:
+    - /bin/bash
+    - -c
+    - |
+        # let's people think we are really busy doing something ...
+        sleep 40
+        # start the fortune app on port 8080
+        /application.sh
+    startupProbe:
+      httpGet:
+        path: /health
+        port: 8080
+      initialDelaySeconds: 40
+    livenessProbe:
+      tcpSocket:
+        port: 8080
+      initialDelaySeconds: 40
+    readinessProbe:
+      httpGet:
+        path: /health
+        port: 8080
+      initialDelaySeconds: 40
+
+  - name: consumer
+    image: alpine:3.20
+    ports:
+    - containerPort: 80
+    args:
+    - ash
+    - -c
+    - |
+        apk add --no-cache curl socat
+        # start a TCP tunnel on port 80 to the producer port 8080
+        socat -v -v tcp-listen:80,fork tcp:127.0.0.1:8080
+    imagePullPolicy: IfNotPresent
+    resources: {}
+    startupProbe:
+      exec:
+        command:
+          - ash
+          - -c
+          - |
+              ps waux | grep socat | grep -v grep
+    livenessProbe:
+      tcpSocket:
+        port: 80
+    readinessProbe:
+      httpGet:
+        path: /health
+        port: 80

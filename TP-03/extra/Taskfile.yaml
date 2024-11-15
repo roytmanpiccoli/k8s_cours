@@ -1,0 +1,27 @@
+version: '3'
+
+tasks:
+  default:
+    desc: "Run all the setup scripts"
+    deps:
+      - cert-manager
+      - ingress-nginx
+      - prometheus
+
+  cert-manager:
+    dir: ./cert-manager
+    cmds:
+      - bash ./setup.sh
+    desc: "Run the Cert-Manager setup script"
+
+  ingress-nginx:
+    dir: ./ingress-nginx
+    cmds:
+      - bash ./setup.sh
+    desc: "Run the Ingress-Nginx setup script"
+
+  prometheus:
+    dir: ./prometheus
+    cmds:
+      - bash ./setup.sh
+    desc: "Run the Prometheus setup script"

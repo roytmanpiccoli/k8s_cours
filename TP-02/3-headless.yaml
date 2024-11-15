@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app08
+  name: app08
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app08
+  template:
+    metadata:
+      labels:
+        app: app08
+    spec:
+      containers:
+      - name: app08
+        image: webofmars/go-whoami:latest
+        ports:
+        - containerPort: 3000
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: app08
+  name: app08
+spec:
+  type: ClusterIP
+  clusterIP: None
+  selector:
+    app: app08
